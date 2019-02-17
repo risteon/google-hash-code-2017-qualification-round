@@ -7,7 +7,7 @@ class ProblemInfo:
         self.cache_size = None  # integer
         self.cache_count = None  # integer
         self.latency_datacenter = None  # numpy array of length number of endpoints
-        self.endpoints = None  # numpy array of num_endpoints x num_cache; if connection, list latency, otherwise -1 (int32)
+        self.endpoints = None  # numpy array [num_endpoints, num_caches]; if connection, list latency, otherwise -1 (int32)
         self.requests = None  # list of list with 3 entries [video, endpoint, requests]
 
 
@@ -57,8 +57,8 @@ def parse_input(filename):
     # insert dummies
     problem_obj.cache_count = num_caches
     problem_obj.cache_size = cache_size
-    problem_obj.latency_datacenter = np.empty(num_endpoints, dtype=np.int32)
-    problem_obj.endpoints = np.empty(shape=[num_endpoints, num_caches], dtype=np.int32)
+    problem_obj.latency_datacenter = np.full(shape=num_endpoints, fill_value=-1, dtype=np.int32)
+    problem_obj.endpoints = np.full(shape=[num_endpoints, num_caches], fill_value=-1, dtype=np.int32)
     problem_obj.requests = num_requests
 
     # endpoints
@@ -68,7 +68,7 @@ def parse_input(filename):
         # connected caches
         for j in range(int(info[1])):
             info = file.readline().split()
-            # problem_obj.endpoints = ...
+            problem_obj.endpoints[i][int(info[0])] = int(info[1])
 
     return problem_obj
 
