@@ -29,3 +29,27 @@ def solve_utility(problem: ProblemInfo):
 
 
     return SolutionOutput()
+
+
+# A Dynamic Programming based Python
+# Program for 0-1 Knapsack problem
+# Returns the maximum value that can
+# be put in a knapsack of capacity W
+def knapSack(capacity, vidsize, time_gain, nbr_vids):
+    K = [[0 for x in range(capacity + 1)] for x in range(nbr_vids + 1)]
+
+    # Build table K[][] in bottom up manner
+    for i in range(nbr_vids + 1):
+        for w in range(capacity + 1):
+            if i == 0 or w == 0:
+                K[i][w] = 0
+            elif vidsize[i-1] <= w:
+                K[i][w] = max(time_gain[i-1] + K[i-1][w-vidsize[i-1]],  K[i-1][w])
+            else:
+                K[i][w] = K[i-1][w]
+
+    return K[nbr_vids][capacity]
+
+
+def solve_for_single_cache(problem, cache_id, current_solution):
+    time_gain = vidsize * 0
