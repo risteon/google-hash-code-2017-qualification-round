@@ -10,6 +10,7 @@ class ProblemInfo:
         self.endpoints = None  # numpy array of num_endpoints x num_cache; if connection, list latency, otherwise -1 (int32)
         self.requests = None  # list of list with 3 entries [video, endpoint, requests]
 
+
 """EXAMPLE
 5 2 4 3 100
 50 50 80 30 110

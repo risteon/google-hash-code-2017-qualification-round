@@ -39,12 +39,12 @@ def compute_score(task, solution):
         ep = request[1]
         nbr = request[2]
         total_requests += nbr
-        latency_cache = task.asdf[ep]
+        latency_cache = task.latency_datacenter[ep]
         cache_conns = task.endpoints[ep]
         for cache_id, conn in enumerate(cache_conns):
             if conn >= 0 and vid in solution.cached_videos[cache_id]:
                 latency_cache = min(latency_cache, conn)
-        saved_micros = (task.asdf[ep] - latency_cache) * nbr * 1000
+        saved_micros = (task.latency_datacenter[ep] - latency_cache) * nbr * 1000
     print('total requests:', total_requests)
     print('saved micros:', saved_micros)
     print('score:', saved_micros / total_requests)

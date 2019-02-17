@@ -38,7 +38,8 @@ def main(problem):
 @click.option('solution', '-s', type=click.File())
 def check_solution(input, solution, args=None):
     task = parse_input(input)
-    compute_score(task, parse_solution(solution, task.endpoints.shape[1], task.TODOcahcesize, task.videos))
+    assert task.cache_count == task.endpoints.shape[1]
+    compute_score(task, parse_solution(solution, task.endpoints.shape[1], task.cache_size, task.videos))
 
 
 if __name__ == "__main__":
