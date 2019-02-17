@@ -55,7 +55,7 @@ def parse_input(filename):
 
     # insert dummies
     problem_obj.latency_datacenter = np.empty(num_endpoints, dtype=np.int32)
-    problem_obj.endpoints = np.empty(num_endpoints * num_caches, dtype=np.int32)
+    problem_obj.endpoints = np.empty(shape=[num_endpoints, num_caches], dtype=np.int32)
 
     # endpoints
     for i in range(num_endpoints):
