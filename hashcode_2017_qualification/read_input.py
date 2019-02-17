@@ -1,10 +1,12 @@
+import numpy as np
 
 class ProblemInfo:
     def __init__(self):
         self.videos = None  # list of video sizes
         self.cache_size = None  # integer
         self.cache_count = None  # integer
-        self.endpoints = None  # list of numpy arrays with endpoints and their latency to cache 0...n
+        self.latency_datacenter = None  # numpy array of length number of endpoints
+        self.endpoints = None  # numpy array of num_endpoints x num_cache; if connection, list latency, otherwise -1 (int32)
         self.requests = None  # list of list with 3 entries [video, endpoint, requests]
 
 """EXAMPLE
@@ -33,13 +35,38 @@ Endpoint 1 has 500ms datacenter latency and is not connected to a cache.
 """
 
 
+def split_first_line(line):
+    info = line.split(' ')  # num_videos, num_endpoints, num_requests, num_caches, cache_size
+    assert len(info) == 5
+    return int(info[0]), int(info[1]), int(info[2]), int(info[3]), int(info[4])
+
+
 def parse_input(filename):
     file = open(filename)
 
     problem_obj = ProblemInfo()
+    num_videos = 0
+    num_endpoints = 0
+    num_requests = 0
+    num_caches = 0
+    cache_size = 0
 
     for idx, line in enumerate(file):
-        pass
+        # read first line
+        if idx == 0:
+            num_videos, num_endpoints, num_requests, num_caches, cache_size = split_first_line(line)
+            print('first line')
+            print(split_first_line(line))
+        # read video sizes
+        if idx == 1:
+            video_sizes = line.split(' ')
+            print(len(video_sizes), num_videos)
+            assert len(video_sizes) == num_videos
+            problem_obj.videos = np.array(video_sizes, dtype=np.int32)
+            print('video sizes')
+            print(problem_obj.videos)
+
+
 
 
     return None
