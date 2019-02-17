@@ -55,12 +55,20 @@ def parse_input(filename):
     problem_obj.videos = np.array(video_sizes, dtype=np.int32)
 
     # insert dummies
+    problem_obj.cache_count = num_caches
+    problem_obj.cache_size = cache_size
     problem_obj.latency_datacenter = np.empty(num_endpoints, dtype=np.int32)
     problem_obj.endpoints = np.empty(shape=[num_endpoints, num_caches], dtype=np.int32)
+    problem_obj.requests = num_requests
 
     # endpoints
     for i in range(num_endpoints):
         info = file.readline().split()
+        problem_obj.latency_datacenter[i] = int(info[0])
+        # connected caches
+        for j in range(int(info[1])):
+            info = file.readline().split()
+            # problem_obj.endpoints = ...
 
     return problem_obj
 
