@@ -7,8 +7,8 @@ class ProblemInfo:
         self.cache_size = None  # integer
         self.cache_count = None  # integer
         self.latency_datacenter = None  # numpy array of length number of endpoints
-        self.endpoints = None  # numpy array [num_endpoints, num_caches]; if connection, list latency, otherwise -1 (int32)
-        self.requests = None  # list of list with 3 entries [video, endpoint, requests]
+        self.endpoints = None  # numpy array [num_endpoints, num_caches]; if connection, list latency, otherwise -1
+        self.requests = None  # numpy array [num_videos, num_endpoints]; number of requests, otherwise -1
 
 
 """EXAMPLE
@@ -59,16 +59,25 @@ def parse_input(filename):
     problem_obj.cache_size = cache_size
     problem_obj.latency_datacenter = np.full(shape=num_endpoints, fill_value=-1, dtype=np.int32)
     problem_obj.endpoints = np.full(shape=[num_endpoints, num_caches], fill_value=-1, dtype=np.int32)
-    problem_obj.requests = num_requests
+    problem_obj.requests = np.full(shape=[num_videos, num_endpoints], fill_value=-1, dtype=np.int32)
 
     # endpoints
     for i in range(num_endpoints):
         info = file.readline().split()
+        # data center latency of current endpoint
         problem_obj.latency_datacenter[i] = int(info[0])
         # connected caches
         for j in range(int(info[1])):
             info = file.readline().split()
             problem_obj.endpoints[i][int(info[0])] = int(info[1])
+
+    # requests
+    for i in range(num_requests):
+        info = file.readline().split()
+        if not problem_obj.requests[int(info[0]), int(info[1])] == -1:
+            print('problem for video {}, endpoint {}; {}'.format(info[0], info[1], problem_obj.requests[int(info[0]), int(info[1])]))
+        print(info)
+        problem_obj.requests[int(info[0]), int(info[1])] = int(info[2])
 
     return problem_obj
 
