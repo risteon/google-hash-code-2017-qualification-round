@@ -7,6 +7,7 @@ import os
 
 from .read_input import parse_input
 from .solution import solve_utility
+from .write_output import SolutionOutput
 
 
 @click.command()
@@ -22,6 +23,10 @@ def main(problem):
     # Todo write all solutions
 
     # Todo calculate scores
+
+    for idx, sol in enumerate(solutions):
+        out = SolutionOutput(sol)
+        out.write_output(str(idx) + '.txt')
 
     return 0
 
