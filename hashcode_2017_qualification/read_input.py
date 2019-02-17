@@ -12,28 +12,17 @@ class ProblemInfo:
 
 
 """EXAMPLE
-5 2 4 3 100
-50 50 80 30 110
-1000 3
-0 100
-2 200
-1 300
-500 0
-3 0 1500
-0 1 1000
-4 0 500
-1 0 1000
-5 videos, 2 endpoints, 4 request descriptions, 3 caches 100MB each.
-Videos 0, 1, 2, 3, 4 have sizes 50MB, 50MB, 80MB, 30MB, 110MB.
-Endpoint 0 has 1000ms datacenter latency and is connected to 3 caches:
-The latency (of endpoint 0) to cache 0 is 100ms.
-The latency (of endpoint 0) to cache 2 is 200ms.
-The latency (of endpoint 0) to cache 1 is 300ms.
-Endpoint 1 has 500ms datacenter latency and is not connected to a cache.
-1500 requests for video 3 coming from endpoint 0.
-1000 requests for video 0 coming from endpoint 1.
-500 requests for video 4 coming from endpoint 0.
-1000 requests for video 1 coming from endpoint 0.
+5 2 4 3 100         5 videos, 2 endpoints, 4 request descriptions, 3 caches 100MB each.
+50 50 80 30 110     Videos 0, 1, 2, 3, 4 have sizes 50MB, 50MB, 80MB, 30MB, 110MB.
+1000 3              Endpoint 0 has 1000ms datacenter latency and is connected to 3 caches:
+0 100               The latency (of endpoint 0) to cache 0 is 100ms.
+2 200               The latency (of endpoint 0) to cache 2 is 200ms.
+1 300               The latency (of endpoint 0) to cache 1 is 300ms.
+500 0               Endpoint 1 has 500ms datacenter latency and is not connected to a cache.
+3 0 1500            1500 requests for video 3 coming from endpoint 0.
+0 1 1000            1000 requests for video 0 coming from endpoint 1.
+4 0 500             500 requests for video 4 coming from endpoint 0.
+1 0 1000            1000 requests for video 1 coming from endpoint 0.
 """
 
 
@@ -74,12 +63,10 @@ def parse_input(filename):
     # requests
     for i in range(num_requests):
         info = file.readline().split()
-        if not problem_obj.requests[int(info[0]), int(info[1])] == -1:
-            print('problem for video {}, endpoint {}; {}'.format(info[0], info[1], problem_obj.requests[int(info[0]), int(info[1])]))
-        print(info)
-        problem_obj.requests[int(info[0]), int(info[1])] = int(info[2])
+        # if there is already an entry in the matrix, then add the requests
+        if problem_obj.requests[int(info[0]), int(info[1])] == -1:
+            problem_obj.requests[int(info[0]), int(info[1])] = int(info[2])
+        else:
+            problem_obj.requests[int(info[0]), int(info[1])] += int(info[2])
 
     return problem_obj
-
-
-# parse_input('/lhome/ltriess/documents/Google_Hash_Code_2017_qualification_round/input/kittens.in.txt')
