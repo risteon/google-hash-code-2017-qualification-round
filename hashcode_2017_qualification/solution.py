@@ -48,8 +48,36 @@ def knapSack(capacity, vidsize, time_gain, nbr_vids):
             else:
                 K[i][w] = K[i-1][w]
 
-    return K[nbr_vids][capacity]
+    selected_vids = vidsize * 0
+    cappa = capacity
+    cur_vid = nbr_vids - 1
+    while cappa > 0 and cur_vid >= 0:
+        if K[cur_vid + 1][cappa] == K[cur_vid][cappa]:
+            cur_vid -= 1
+        elif K[cur_vid + 1][cappa] == time_gain[cur_vid] + K[cur_vid][cappa-vidsize[cur_vid]:
+            selected_vids[cur_vid] = 1
+            cur_vid -= 1
+            cappa -= vidsize[cur_vid]
+        else:
+            assert False
+
+    return K[nbr_vids][capacity], selected_vids
 
 
 def solve_for_single_cache(problem, cache_id, current_solution):
-    time_gain = vidsize * 0
+    time_gain = problem.videos * 0
+    for request_idxs in np.where(problem.requests > 0):
+        nbr_reqs = problem.requests[request_idxs]
+        video = request_idxs[0]
+        ep = request_idxs[1]
+        cur_latency = problem.latency_datacenter[ep]
+        for c in range(problem.cache_count):
+            if c == cache_id:
+                continue
+            if problem.endpoints[ep][c] != -1 and current_solution.state[c][video]:
+                cur_latency = min(cur_latency, problem.endpoints[ep][c])
+        time_gain[video] += max(0, cur_latency - problem.endpoints[ep][cache_id])
+    max_time_gain, selected_vids = knapSack(problem.cache_size, problem.videos, time_gain, len(problem.videos))
+    assert max_time_gain > 0
+    current_solution.state[c] = np.array(selected_vids, dtype=np.bool)
+    return current_solution
