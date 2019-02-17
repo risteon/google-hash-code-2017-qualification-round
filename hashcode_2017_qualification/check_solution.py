@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import numpy as np
 
 
 class Solution:
@@ -36,15 +37,15 @@ def parse_solution(file, cache_count, cache_size, video_sizes):
 def compute_score(task, solution):
     saved_micros = 0
     total_requests = 0
-    for request in task.requests:
-        vid = request[0]
-        ep = request[1]
-        nbr = request[2]
+    for index, nbr in np.ndenumerate(task.requests):
+        vid = index[0]
+        ep = index[1]
+
         total_requests += nbr
         latency_cache = task.latency_datacenter[ep]
         cache_conns = task.endpoints[ep]
         for cache_id, conn in enumerate(cache_conns):
-            if conn >= 0 and vid in solution.cached_videos[cache_id]:
+            if conn >= 0 and vid in solution.state[cache_id]:
                 latency_cache = min(latency_cache, conn)
         saved_micros = (task.latency_datacenter[ep] - latency_cache) * nbr * 1000
     print('total requests:', total_requests)

@@ -11,10 +11,14 @@ from .write_output import SolutionOutput
 from .check_solution import parse_solution, compute_score
 
 
+def solve_single_cache_dummy(problem, cache_id, current_solution):
+    return current_solution
+
+
 def solution(problem: ProblemInfo):
-    solution = SolutionOutput()
+    solution = SolutionOutput(problem)
     for i in range(problem.cache_count):
-        solution = solve_for_single_cache(problem, i, solution)
+        solution = solve_single_cache_dummy(problem, i, solution)
     return solution
 
 
@@ -24,7 +28,8 @@ def main(problem):
 
     solution_functions = [solution]
 
-    problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'input', problem))
+    problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
+                                           'input', problem))
 
     solutions = [s(problem_obj) for s in solution_functions]
 
