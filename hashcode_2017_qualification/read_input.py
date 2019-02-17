@@ -45,31 +45,18 @@ def parse_input(filename):
     file = open(filename)
 
     problem_obj = ProblemInfo()
-    num_videos = 0
-    num_endpoints = 0
-    num_requests = 0
-    num_caches = 0
-    cache_size = 0
+    num_videos, num_endpoints, num_requests, num_caches, cache_size = split_first_line(file.readline())
 
-    for idx, line in enumerate(file):
-        # read first line
-        if idx == 0:
-            num_videos, num_endpoints, num_requests, num_caches, cache_size = split_first_line(line)
-            print('first line')
-            print(split_first_line(line))
-        # read video sizes
-        if idx == 1:
-            video_sizes = line.split(' ')
-            print(len(video_sizes), num_videos)
-            assert len(video_sizes) == num_videos
-            problem_obj.videos = np.array(video_sizes, dtype=np.int32)
-            print('video sizes')
-            print(problem_obj.videos)
+    # video sizes
+    video_sizes = file.readline().split(' ')
+    assert len(video_sizes) == num_videos
+    problem_obj.videos = np.array(video_sizes, dtype=np.int32)
 
+    # endpoints
+    for i in range(num_endpoints):
+        pass
 
-
-
-    return None
+    return problem_obj
 
 
 parse_input('/lhome/ltriess/documents/Google_Hash_Code_2017_qualification_round/input/kittens.in.txt')
