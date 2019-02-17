@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """Solution module."""
+import numpy as np
+from .read_input import ProblemInfo
 
-from .read_input import
+
+def solve_utility(problem: ProblemInfo):
 
 
 
+
+    return None

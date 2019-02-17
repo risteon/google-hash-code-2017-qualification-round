@@ -1,16 +1,24 @@
 import csv
+from .read_input import ProblemInfo
+import numpy as np
 
-class SolutionOutput():
-    def __init__(self, cache_server_video_mapping=tuple(tuple())):
-        self.num_cache_servers = len(cache_server_video_mapping)
-        self.cache_server_video_mapping = cache_server_video_mapping
+class SolutionOutput:
+    def __init__(self, problem: ProblemInfo):
 
+        self.problem = problem
+        self.state = np.zeros(shape=[problem.cache_count, len(problem.videos)], dtype=np.bool)
 
     def write_output(self, target="output.txt"):
 
         with open(target, 'wb') as out:
             csv_out = csv.writer(out, delimiter=' ')
-            csv_out.writerow(self.num_cache_servers)
 
-            for row in self.cache_server_video_mapping:
-                csv_out.writerow(row)
+            num_used_caches = np.count_nonzero(np.any(self.state, axis=-1))
+
+            csv_out.writerow(num_used_caches)
+
+            for i,row in enumerate(self.state):
+                if not np.any(row):
+                    continue
+
+                csv_out.writerow([i] + [x for x in row[row != 0]])
