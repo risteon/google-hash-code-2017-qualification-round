@@ -10,13 +10,13 @@ class SolutionOutput:
 
     def write_output(self, target="output.txt"):
 
-        with open(target, 'wb') as out:
+        with open(target, 'w') as out:
             print("Writing solution to " + target)
             csv_out = csv.writer(out, delimiter=' ')
 
             num_used_caches = np.count_nonzero(np.any(self.state, axis=-1))
 
-            csv_out.writerow(num_used_caches)
+            csv_out.writerow([num_used_caches])
 
             for i,row in enumerate(self.state):
                 if not np.any(row):
