@@ -28,10 +28,11 @@ def main(problem):
 
     solutions = [s(problem_obj) for s in solution_functions]
 
-    # Todo write all solutions
+    # calculate scores
+    scores = [compute_score(problem_obj, s) for s in solutions]
+    print(scores)
 
-    # Todo calculate scores
-
+    # write all solutions
     for idx, sol in enumerate(solutions):
         sol.write_output(str(idx) + '.txt')
 
