@@ -1,17 +1,13 @@
 #!/usr/bin/env python3
 import numpy as np
+from .write_output import SolutionOutput
 
 
-class Solution:
-    def __init__(self):
-        self.cached_videos = dict()  # set of video ids organized by cache id
-
-
-def parse_solution(file, cache_count, cache_size, video_sizes):
+def parse_solution(file, cache_count, cache_size, video_sizes, problem):
     assert cache_count > 0
     assert cache_size > 0
     assert all(v > 0 for v in video_sizes)
-    sol = Solution()
+    sol = SolutionOutput(problem)
     num_videos = len(video_sizes)
     spec_cluster = set()
     with open(file) as fin:
@@ -27,9 +23,9 @@ def parse_solution(file, cache_count, cache_size, video_sizes):
             assert c not in spec_cluster
             spec_cluster.add(c)
 
-            sol.cached_videos[c] = {int(line[i+1]) for i in range(len(line) - 1)}
-            assert len(sol.cached_videos[c]) == len(line) - 1
-            vid_size = sum(video_sizes[v] for v in sol.cached_videos[c])
+            sol.state[c, list(int(line[i+1]) for i in range(len(line) - 1))] = True
+            assert sum(sol.state[c]) == len(line) - 1
+            vid_size = sum(video_sizes * sol.state[c])
             assert vid_size <= cache_size
     return sol
 
@@ -42,13 +38,17 @@ def compute_score(task, solution):
             continue
         vid = index[0]
         ep = index[1]
+        # print('vid, ep, nbr: ', vid, ep, nbr)
 
         total_requests += nbr
         cache_conns = task.endpoints[ep]
         datacenter_latency = np.ones_like(cache_conns) * task.latency_datacenter[ep]
-        datacenter_latency = np.where(np.logical_and(cache_conns >= 0, solution.state[:, vid]),
+        cache_latency = np.where(np.logical_and(cache_conns >= 0, solution.state[:, vid]),
                                       cache_conns, datacenter_latency)
-        saved_micros += (task.latency_datacenter[ep] - np.min(datacenter_latency)) * nbr * 1000
+        # print('datacenter_latency: ', datacenter_latency)
+        # print('cache_latency: ', cache_latency)
+        saved_micros += (task.latency_datacenter[ep] - np.min(cache_latency)) * nbr * 1000
+        # print(saved_micros)
     print('total requests:', total_requests)
     print('saved micros:', saved_micros)
     print('score:', saved_micros / total_requests)

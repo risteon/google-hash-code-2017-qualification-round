@@ -29,8 +29,10 @@ def solve_single_cache_dummy(problem, cache_id, current_solution):
 
 def solution(problem: ProblemInfo):
     solution = SolutionOutput(problem)
+    # solution.dump()
     for i in range(problem.cache_count):
-        solution = solve_single_cache_dummy(problem, i, solution)
+        solution = solve_for_single_cache(problem, i, solution)
+        # solution.dump()
     return solution
 
 
@@ -59,12 +61,12 @@ def main(problem):
 
 
 @click.command()
-@click.option('input', '-i', type=click.File())
-@click.option('solution', '-s', type=click.File())
+@click.option('input', '-i')
+@click.option('solution', '-s')
 def check_solution(input, solution, args=None):
     task = parse_input(input)
     assert task.cache_count == task.endpoints.shape[1]
-    compute_score(task, parse_solution(solution, task.endpoints.shape[1], task.cache_size, task.videos))
+    compute_score(task, parse_solution(solution, task.endpoints.shape[1], task.cache_size, task.videos, task))
 
 
 if __name__ == "__main__":

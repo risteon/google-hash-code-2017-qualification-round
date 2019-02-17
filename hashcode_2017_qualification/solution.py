@@ -100,5 +100,5 @@ def solve_for_single_cache(problem, cache_id, current_solution):
     # print('time_gain: ', time_gain)
     max_time_gain, selected_vids = knapSack(problem.cache_size, problem.videos, time_gain, len(problem.videos))
     assert max_time_gain >= 0
-    current_solution.state[c] = np.array(selected_vids, dtype=np.bool)
+    current_solution.state[cache_id] = np.array(selected_vids, dtype=np.bool)
     return current_solution
