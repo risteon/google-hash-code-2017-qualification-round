@@ -15,7 +15,7 @@ def main(problem):
 
     solution_functions = [solve_utility]
 
-    problem_obj = parse_input(os.path.join(os.path.realpath(__file__), '..', 'input', problem))
+    problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'input', problem))
 
     solutions = [s(problem_obj) for s in solution_functions]
 
