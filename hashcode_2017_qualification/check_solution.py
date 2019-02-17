@@ -38,6 +38,8 @@ def compute_score(task, solution):
     saved_micros = 0
     total_requests = 0
     for index, nbr in np.ndenumerate(task.requests):
+        if nbr == 0:
+            continue
         vid = index[0]
         ep = index[1]
 
@@ -45,7 +47,7 @@ def compute_score(task, solution):
         latency_cache = task.latency_datacenter[ep]
         cache_conns = task.endpoints[ep]
         for cache_id, conn in enumerate(cache_conns):
-            if conn >= 0 and vid in solution.state[cache_id]:
+            if conn >= 0 and solution.state[cache_id, vid]:
                 latency_cache = min(latency_cache, conn)
         saved_micros = (task.latency_datacenter[ep] - latency_cache) * nbr * 1000
     print('total requests:', total_requests)
