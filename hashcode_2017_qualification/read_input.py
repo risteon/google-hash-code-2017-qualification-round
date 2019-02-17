@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class ProblemInfo:
     def __init__(self):
         self.videos = None  # list of video sizes
@@ -59,4 +60,4 @@ def parse_input(filename):
     return problem_obj
 
 
-parse_input('/lhome/ltriess/documents/Google_Hash_Code_2017_qualification_round/input/kittens.in.txt')
+# parse_input('/lhome/ltriess/documents/Google_Hash_Code_2017_qualification_round/input/kittens.in.txt')
