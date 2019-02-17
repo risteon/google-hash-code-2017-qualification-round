@@ -1,29 +1,31 @@
 #!/usr/bin/env python3
 
 
-class Solution():
+class Solution:
     def __init__(self):
         self.cached_videos = dict()  # set of video ids organized by cache id
 
 
-def parse_solution(file, C, cache_size, video_sizes):
-    assert C > 0
+def parse_solution(file, cache_count, cache_size, video_sizes):
+    assert cache_count > 0
     assert cache_size > 0
     assert all(v > 0 for v in video_sizes)
     sol = Solution()
-    V = len(video_sizes)
+    num_videos = len(video_sizes)
     spec_cluster = set()
     with open(file) as fin:
         firstline = fin.readline().strip().split(' ')
         assert len(firstline) == 1
-        N = int(firstline[0])
-        assert 0 <= N <= C
-        for i in range(N):
+        used_caches = int(firstline[0])
+        assert 0 <= used_caches <= cache_count
+        for i in range(used_caches):
             line = fin.readline().strip().split(' ')
-            assert 1 <= len(line) <= 1 + V
+            assert 1 <= len(line) <= 1 + num_videos
+            # add cache to set, if not already present
             c = int(line[0])
             assert c not in spec_cluster
-            spec_cluster.insert(c)
+            spec_cluster.add(c)
+
             sol.cached_videos[c] = {int(line[i+1]) for i in range(len(line) - 1)}
             assert len(sol.cached_videos[c]) == len(line) - 1
             vid_size = sum(video_sizes[v] for v in sol.cached_videos[c])
