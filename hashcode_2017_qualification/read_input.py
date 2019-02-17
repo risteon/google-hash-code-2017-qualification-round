@@ -53,9 +53,13 @@ def parse_input(filename):
     assert len(video_sizes) == num_videos
     problem_obj.videos = np.array(video_sizes, dtype=np.int32)
 
+    # insert dummies
+    problem_obj.latency_datacenter = np.empty(num_endpoints, dtype=np.int32)
+    problem_obj.endpoints = np.empty(num_endpoints * num_caches, dtype=np.int32)
+
     # endpoints
     for i in range(num_endpoints):
-        pass
+        info = file.readline().split()
 
     return problem_obj
 
