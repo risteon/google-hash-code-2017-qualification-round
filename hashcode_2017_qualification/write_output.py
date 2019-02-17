@@ -2,6 +2,7 @@ import csv
 from .read_input import ProblemInfo
 import numpy as np
 
+
 class SolutionOutput:
     def __init__(self, problem: ProblemInfo):
 
@@ -18,8 +19,13 @@ class SolutionOutput:
 
             csv_out.writerow([num_used_caches])
 
-            for i,row in enumerate(self.state):
+            for i, row in enumerate(self.state):
                 if not np.any(row):
                     continue
 
-                csv_out.writerow([i] + [x for x in row[row != 0]])
+                lst = []
+                for j, x in enumerate(row):
+                    if x != 0:
+                        lst.append(j)
+
+                csv_out.writerow([i] + lst)
