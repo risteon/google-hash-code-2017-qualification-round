@@ -11,6 +11,7 @@ class SolutionOutput:
     def write_output(self, target="output.txt"):
 
         with open(target, 'wb') as out:
+            print("Writing solution to " + target)
             csv_out = csv.writer(out, delimiter=' ')
 
             num_used_caches = np.count_nonzero(np.any(self.state, axis=-1))
