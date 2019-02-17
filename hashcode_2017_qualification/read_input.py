@@ -10,6 +10,14 @@ class ProblemInfo:
         self.endpoints = None  # numpy array [num_endpoints, num_caches]; if connection, list latency, otherwise -1
         self.requests = None  # numpy array [num_videos, num_endpoints]; number of requests, otherwise 0
 
+    def dump(self):
+        print('dumping probleminfo')
+        print('video sizes: ', self.videos)
+        print('cache size: ', self.cache_size)
+        print('nbr caches: ', self.cache_count)
+        print('latency endpoints to datacenter: ', self.latency_datacenter)
+        print('latency from endpoint to cache: ', self.endpoints)
+        print('nbr request of vid at endpoint: ', self.requests)
 
 """EXAMPLE
 5 2 4 3 100         5 videos, 2 endpoints, 4 request descriptions, 3 caches 100MB each.

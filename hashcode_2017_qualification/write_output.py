@@ -9,6 +9,9 @@ class SolutionOutput:
         self.problem = problem
         self.state = np.zeros(shape=[problem.cache_count, len(problem.videos)], dtype=np.bool)
 
+    def dump(self):
+        print('if cache has video: ', self.state)
+
     def write_output(self, target="output.txt"):
 
         with open(target, 'w') as out:

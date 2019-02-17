@@ -43,6 +43,8 @@ def main(problem):
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                                            'input', problem))
 
+    # problem_obj.dump()
+
     solutions = [s(problem_obj) for s in solution_functions]
 
     # calculate scores
