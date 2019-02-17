@@ -5,17 +5,24 @@ import sys
 import click
 import os
 
-from .read_input import parse_input
-from .solution import solve_utility
+from .read_input import parse_input, ProblemInfo
+from .solution import solve_for_single_cache
 from .write_output import SolutionOutput
 from .check_solution import parse_solution, compute_score
+
+
+def solution(problem: ProblemInfo):
+    solution = SolutionOutput()
+    for i in range(problem.cache_count):
+        solution = solve_for_single_cache(problem, i, solution)
+    return solution
 
 
 @click.command()
 @click.option('--problem', default='kittens.in.txt')
 def main(problem):
 
-    solution_functions = [solve_utility]
+    solution_functions = [solution]
 
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'input', problem))
 
@@ -26,8 +33,7 @@ def main(problem):
     # Todo calculate scores
 
     for idx, sol in enumerate(solutions):
-        out = SolutionOutput(sol)
-        out.write_output(str(idx) + '.txt')
+        sol.write_output(str(idx) + '.txt')
 
     return 0
 
