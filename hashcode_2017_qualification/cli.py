@@ -18,7 +18,7 @@ def solve_single_cache_dummy(problem, cache_id, current_solution):
 def solution(problem: ProblemInfo):
     solution = SolutionOutput(problem)
     for i in range(problem.cache_count):
-        solution = solve_single_cache_dummy(problem, i, solution)
+        solution = solve_for_single_cache(problem, i, solution)
     return solution
 
 

@@ -54,7 +54,7 @@ def knapSack(capacity, vidsize, time_gain, nbr_vids):
     while cappa > 0 and cur_vid >= 0:
         if K[cur_vid + 1][cappa] == K[cur_vid][cappa]:
             cur_vid -= 1
-        elif K[cur_vid + 1][cappa] == time_gain[cur_vid] + K[cur_vid][cappa-vidsize[cur_vid]:
+        elif K[cur_vid + 1][cappa] == time_gain[cur_vid] + K[cur_vid][cappa-vidsize[cur_vid]]:
             selected_vids[cur_vid] = 1
             cur_vid -= 1
             cappa -= vidsize[cur_vid]
