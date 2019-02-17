@@ -8,6 +8,8 @@ import os
 from .read_input import parse_input
 from .solution import solve_utility
 from .write_output import SolutionOutput
+from .read_input import parse_input
+from .check_solution import parse_solution, compute_score
 
 
 @click.command()
@@ -29,6 +31,14 @@ def main(problem):
         out.write_output(str(idx) + '.txt')
 
     return 0
+
+
+@click.command()
+@click.option('input', '-i', type=click.File())
+@click.option('solution', '-s', type=click.File())
+def check_solution(input, solution, args=None):
+    task = parse_input(input)
+    compute_score(task, parse_solution(solution, task.endpoints.shape[1], task.TODOcahcesize, task.videos))
 
 
 if __name__ == "__main__":
