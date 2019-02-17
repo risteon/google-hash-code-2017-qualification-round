@@ -8,7 +8,7 @@ class ProblemInfo:
         self.cache_count = None  # integer
         self.latency_datacenter = None  # numpy array of length number of endpoints
         self.endpoints = None  # numpy array [num_endpoints, num_caches]; if connection, list latency, otherwise -1
-        self.requests = None  # numpy array [num_videos, num_endpoints]; number of requests, otherwise -1
+        self.requests = None  # numpy array [num_videos, num_endpoints]; number of requests, otherwise 0
 
 
 """EXAMPLE
@@ -37,6 +37,8 @@ def parse_input(filename):
 
     problem_obj = ProblemInfo()
     num_videos, num_endpoints, num_requests, num_caches, cache_size = split_first_line(file.readline())
+    problem_obj.cache_count = num_caches
+    problem_obj.cache_size = cache_size
 
     # video sizes
     video_sizes = file.readline().split(' ')
@@ -44,11 +46,9 @@ def parse_input(filename):
     problem_obj.videos = np.array(video_sizes, dtype=np.int32)
 
     # insert dummies
-    problem_obj.cache_count = num_caches
-    problem_obj.cache_size = cache_size
     problem_obj.latency_datacenter = np.full(shape=num_endpoints, fill_value=-1, dtype=np.int32)
     problem_obj.endpoints = np.full(shape=[num_endpoints, num_caches], fill_value=-1, dtype=np.int32)
-    problem_obj.requests = np.full(shape=[num_videos, num_endpoints], fill_value=-1, dtype=np.int32)
+    problem_obj.requests = np.zeros(shape=[num_videos, num_endpoints], dtype=np.int32)
 
     # endpoints
     for i in range(num_endpoints):
@@ -63,10 +63,6 @@ def parse_input(filename):
     # requests
     for i in range(num_requests):
         info = file.readline().split()
-        # if there is already an entry in the matrix, then add the requests
-        if problem_obj.requests[int(info[0]), int(info[1])] == -1:
-            problem_obj.requests[int(info[0]), int(info[1])] = int(info[2])
-        else:
-            problem_obj.requests[int(info[0]), int(info[1])] += int(info[2])
+        problem_obj.requests[int(info[0]), int(info[1])] += int(info[2])
 
     return problem_obj
