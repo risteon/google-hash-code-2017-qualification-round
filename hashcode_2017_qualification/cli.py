@@ -8,7 +8,6 @@ import os
 from .read_input import parse_input
 from .solution import solve_utility
 from .write_output import SolutionOutput
-from .read_input import parse_input
 from .check_solution import parse_solution, compute_score
 
 
