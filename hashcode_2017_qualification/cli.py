@@ -4,6 +4,7 @@
 import sys
 import click
 import os
+import numpy as np
 
 from .read_input import parse_input, ProblemInfo
 from .solution import solve_for_single_cache
@@ -12,13 +13,24 @@ from .check_solution import parse_solution, compute_score
 
 
 def solve_single_cache_dummy(problem, cache_id, current_solution):
+
+    # get all endpoints connected to cache
+    ep = problem.endpoints[:, cache_id] != -1
+    v = problem.requests[:, ep]
+    c = problem.cache_size
+
+    for i in np.nonzero(np.squeeze(v))[0]:
+        if problem.videos[i] < c:
+            c -= problem.videos[i]
+            current_solution.state[cache_id, i] = True
+
     return current_solution
 
 
 def solution(problem: ProblemInfo):
     solution = SolutionOutput(problem)
     for i in range(problem.cache_count):
-        solution = solve_for_single_cache(problem, i, solution)
+        solution = solve_single_cache_dummy(problem, i, solution)
     return solution
 
 
