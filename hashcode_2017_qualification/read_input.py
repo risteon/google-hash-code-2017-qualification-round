@@ -1,7 +1,9 @@
 
-class ProblemInfo(object):
+class ProblemInfo:
     def __init__(self):
         self.videos = None  # list of video sizes
+        self.cache_size = None  # integer
+        self.cache_count = None  # integer
         self.endpoints = None  # list of numpy arrays with endpoints and their latency to cache 0...n
         self.requests = None  # list of list with 3 entries [video, endpoint, requests]
 
