@@ -38,8 +38,7 @@ def parse_input(filename):
     max_num_tags = 100
 
     tag_to_label_mapping = dict()
-    current_tag_id = 0
-    default_tag_id = -1
+    current_tag_id = 1
 
     for i in range(num_photos):
         info = file.readline().split(' ')
