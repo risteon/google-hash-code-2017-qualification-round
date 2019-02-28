@@ -25,8 +25,10 @@ class ProblemInfo:
 
 def get_or_create_tag_id(tag, current_dict, current_tag_id):
     if tag in current_dict:
+        print('{} in dict as {}'.format(tag, current_dict[tag]))
         return current_dict[tag]
     else:
+        print('set {} as {}'.format(tag, current_tag_id))
         current_dict[tag] = current_tag_id
         return current_tag_id
 
@@ -40,6 +42,7 @@ def parse_input(filename):
     vertical_count = 0
     horizontal_count = 0
 
+    print('count vertical and horizontal images')
     for i in range(num_photos):
         info = file.readline().split(' ')
         shape = str(info[0])
@@ -64,20 +67,29 @@ def parse_input(filename):
     tag_to_label_mapping = dict()
     current_tag_id = 1
 
+    vertical_count = 0
+    horizontal_count = 0
+
     for i in range(num_photos):
         info = file.readline().split(' ')
         shape = str(info[0])
         num_tags = int(info[1])
+        tags = info[2:]
+        print(info)
         if shape == 'V':
             for j in range(num_tags):
+                print(tags[j])
                 problem_obj.vertical_tags[vertical_count][j] = \
-                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
+                    get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
                 problem_obj.vertical_id[vertical_count] = i
+            vertical_count += 1
         elif shape == 'H':
             for j in range(num_tags):
+                print(tags[j])
                 problem_obj.horizontal_tags[horizontal_count][j] = \
-                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
+                    get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
                 problem_obj.horizontal_id[vertical_count] = i
+            horizontal_count += 1
         else:
             raise ValueError
 
