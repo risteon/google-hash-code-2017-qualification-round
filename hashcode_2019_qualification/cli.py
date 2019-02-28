@@ -7,55 +7,28 @@ import os
 import numpy as np
 
 from .read_input import parse_input, ProblemInfo
-from .solution import solve_for_single_cache
 from .write_output import SolutionOutput
 from .check_solution import parse_solution, compute_score
 
 
-def solve_single_cache_dummy(problem, cache_id, current_solution):
-
-    # get all endpoints connected to cache
-    ep = problem.endpoints[:, cache_id] != -1
-    v = problem.requests[:, ep]
-    c = problem.cache_size
-
-    for i in np.nonzero(np.squeeze(v))[0]:
-        if problem.videos[i] < c:
-            c -= problem.videos[i]
-            current_solution.state[cache_id, i] = True
-
-    return current_solution
-
-
-def solution(problem: ProblemInfo):
-    solution = SolutionOutput(problem)
-    # solution.dump()
-    for i in range(problem.cache_count):
-        solution = solve_for_single_cache(problem, i, solution)
-        # solution.dump()
-    return solution
+def dummy_vertical_mapping(problem_obj):
+    return problem_obj.vertical_id.reshape([2, -1])
 
 
 @click.command()
 @click.option('--problem', default='input/a_example.txt')
 def main(problem):
 
-    solution_functions = [solution]
-
+    solution_functions = [None]
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                                            problem))
 
-    # problem_obj.dump()
+    assert problem_obj.vertical_id.shape[0] % 2 == 0
+    vertical_mapping = dummy_vertical_mapping(problem_obj)
 
-    solutions = [s(problem_obj) for s in solution_functions]
-
-    # calculate scores
-    scores = [compute_score(problem_obj, s) for s in solutions]
-    print(scores)
-
-    # write all solutions
-    for idx, sol in enumerate(solutions):
-        sol.write_output(str(idx) + '.txt')
+    # combined_mapping
+    n_horiz = problem_obj.horizontal_id.shape[0]
+    mapping = np.arange(0, n_horiz + vertical_mapping.shape[0])
 
     return 0
 
