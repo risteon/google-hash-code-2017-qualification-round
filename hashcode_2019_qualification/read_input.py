@@ -21,14 +21,16 @@ class ProblemInfo:
 
     def dump(self):
         print('dumping problem info')
+        print('vertical ids: '.format(self.vertical_id))
+        print('vertical tags: '.format(self.vertical_tags))
+        print('horizontal ids: '.format(self.horizontal_id))
+        print('horizontal tags: '.format(self.horizontal_tags))
 
 
 def get_or_create_tag_id(tag, current_dict, current_tag_id):
     if tag in current_dict:
-        print('{} in dict as {}'.format(tag, current_dict[tag]))
         return current_dict[tag], current_tag_id
     else:
-        print('set {} as {}'.format(tag, current_tag_id))
         current_dict[tag] = current_tag_id
         return current_tag_id, current_tag_id + 1
 
@@ -42,7 +44,7 @@ def parse_input(filename):
     vertical_count = 0
     horizontal_count = 0
 
-    print('count vertical and horizontal images')
+    # count vertical and horizontal photos first
     for i in range(num_photos):
         info = file.readline().split(' ')
         shape = str(info[0])
@@ -75,7 +77,6 @@ def parse_input(filename):
         shape = str(info[0])
         num_tags = int(info[1])
         tags = info[2:]
-        print(info)
         if shape == 'V':
             for j, tag in enumerate(tags):
                 if j == num_tags - 1:
@@ -94,8 +95,5 @@ def parse_input(filename):
             horizontal_count += 1
         else:
             raise ValueError
-
-    print(problem_obj.horizontal_tags)
-    print(problem_obj.vertical_tags)
 
     return problem_obj
