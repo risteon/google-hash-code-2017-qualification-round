@@ -88,7 +88,7 @@ def parse_input(filename):
                 print(tags[j])
                 problem_obj.horizontal_tags[horizontal_count][j] = \
                     get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
-                problem_obj.horizontal_id[vertical_count] = i
+                problem_obj.horizontal_id[horizontal_count] = i
             horizontal_count += 1
         else:
             raise ValueError
