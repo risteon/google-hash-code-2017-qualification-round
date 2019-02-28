@@ -9,6 +9,7 @@ import numpy as np
 from .read_input import parse_input, ProblemInfo
 from .write_output import SolutionOutput
 from .check_solution import parse_solution, compute_score
+from .statistics import compute
 
 
 def dummy_vertical_mapping(problem_obj):
@@ -22,6 +23,8 @@ def main(problem):
     solution_functions = [None]
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                                            problem))
+
+    compute(problem_obj)
 
     assert problem_obj.vertical_id.shape[0] % 2 == 0
     vertical_mapping = dummy_vertical_mapping(problem_obj)
