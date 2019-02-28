@@ -13,12 +13,18 @@ H 2 garden cat          Photo 3 is horizontal and has tags [garden, cat]
 
 class ProblemInfo:
     def __init__(self):
-        self.vertical_photos = None
-        self.horizontal_photos = None
+        self.vertical_photos = np.empty([])
+        self.horizontal_photos = np.empty([])
 
     def dump(self):
         print('dumping problem info')
-        print('number of photos: ', self.num_photos)
+
+def get_or_create_tag_id(tag, current_dict, current_tag_id):
+    if tag in current_dict:
+        return current_dict[tag]
+    else:
+        current_dict[tag] = current_tag_id
+        return current_tag_id
 
 
 def parse_input(filename):
@@ -27,26 +33,31 @@ def parse_input(filename):
     problem_obj = ProblemInfo()
     num_photos = int(file.readline())
 
-    tag_to_label_mapping = dict()
     vertical_count = 0
     horizontal_count = 0
+    max_num_tags = 100
+
+    tag_to_label_mapping = dict()
+    current_tag_id = 0
+    default_tag_id = -1
 
     for i in range(num_photos):
         info = file.readline().split(' ')
-        if str(info[0]) == 'V':
+        shape = str(info[0])
+        num_tags = int(info[1])
+        if shape == 'V':
+            problem_obj.vertical_photos[vertical_count] = np.zeros([max_num_tags])
+            for j in range(num_tags):
+                problem_obj.vertical_photos[vertical_count][j] = \
+                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
             vertical_count += 1
-        elif str(info[0]) == 'H':
+        elif shape == 'H':
+            problem_obj.horizontal_photos[horizontal_count] = np.zeros([max_num_tags])
+            for j in range(num_tags):
+                problem_obj.horizontal_photos[horizontal_count][j] = \
+                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
             horizontal_count += 1
         else:
             raise ValueError
-
-    problem_obj.vertical_photos = np.empty([vertical_count])
-    problem_obj.horizontal_photos = np.empty([horizontal_count])
-
-    file = open(filename)
-    file.readline()
-
-    for i in range(num_photos):
-        pass
 
     return problem_obj
