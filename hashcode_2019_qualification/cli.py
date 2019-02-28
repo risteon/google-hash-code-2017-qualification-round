@@ -12,7 +12,7 @@ from .write_output import write_output
 from .check_solution import parse_solution, compute_score
 from .statistics import compute
 from .solution import subdivide_and_solve_subproblems
-
+from .combine_vertical_images import combine_vertical_images
 
 def dummy_vertical_mapping(problem_obj):
     v_ids = problem_obj.vertical_id.reshape([-1, 2])
@@ -33,7 +33,7 @@ def get_time_stamp(with_date=False, with_delims=False):
 
 
 @click.command()
-@click.option('--problem', default='input/a_example.txt')
+@click.option('--problem', default='input/c_memorable_moments.txt')
 def main(problem):
 
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
@@ -42,14 +42,20 @@ def main(problem):
     compute(problem_obj)
 
     assert problem_obj.vertical_id.shape[0] % 2 == 0
-    vertical_mapping, merged_tags = dummy_vertical_mapping(problem_obj)
+    vertical_mapping, merged_tags = combine_vertical_images(problem_obj)
 
     # combined_mapping
     n_horiz = problem_obj.horizontal_id.shape[0]
     mapping = np.arange(0, n_horiz + vertical_mapping.shape[0])
 
-    #
-    tags = np.concatenate((problem_obj.horizontal_tags, merged_tags))
+    def extend(arr, l):
+        if l > arr.shape[-1]:
+            return np.pad(arr, ((0, 0), (0, l-arr.shape[-1])), 'constant')
+        return arr
+
+    l = max(problem_obj.horizontal_tags.shape[-1], merged_tags.shape[-1])
+
+    tags = np.concatenate((extend(problem_obj.horizontal_tags,l), extend(merged_tags,l)))
     solution_ids = subdivide_and_solve_subproblems(tags, mapping)
 
     horiz_ids = np.stack((problem_obj.horizontal_id,
