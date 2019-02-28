@@ -12,15 +12,23 @@ from numba import jit
 input_array = np.asarray([[2, 3, 0, 0, 0], [2, 1, 3, 5, 0], [7, 2, 3, 0, 0]])
 
 
+def subdivide_into_subproblems(slide_input_array, slide_ids):
+    assert slide_input_array.shape[0] == slide_ids.shape[0]
+
+
+
+
 def compute_score_for_submatrix_of_photos(input_array):
     n = input_array.shape[0]
     scores = np.zeros(shape=[n, n], dtype=np.int32)
 
     for a in range(n):
         for b in range(a+1, n):
-            scores[a, b] = min(np.setdiff1d(input_array[a, :], input_array[b, :]).size,
-                               np.setdiff1d(input_array[b, :], input_array[a, :]).size,
-                               np.intersect1d(input_array[a, :], input_array[b, :]).size - 1)
+            n_intersect = np.intersect1d(input_array[a, :], input_array[b, :]).size - 1
+            # find first occurence of zero -> number of unique elements
+            n_diff_ab = np.nonzero(input_array[a, :])[0][-1] + 1 - n_intersect
+            n_diff_ba = np.nonzero(input_array[b, :])[0][-1] + 1 - n_intersect
+            scores[a, b] = min(n_intersect, n_diff_ab, n_diff_ba)
     # mirror along diagonal
     return scores.transpose() + scores
 
@@ -47,6 +55,3 @@ def compute_score_for_submatrix_of_photos(input_array):
 #
 #
 #     return SolutionOutput()
-
-
-compute_score_for_submatrix_of_photos(input_array)
