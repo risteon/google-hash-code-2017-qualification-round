@@ -1,0 +1,8 @@
+7
+H 3 cat beach sun
+H 2 selfie smile
+H 2 garden selfie
+H 2 garden cat
+H 5 cat garden house selfie dog
+H 1 house
+H 5 cat house selfie smile beach
