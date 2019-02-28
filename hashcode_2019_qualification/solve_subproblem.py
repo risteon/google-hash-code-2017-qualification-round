@@ -4,7 +4,7 @@ import numpy as np
 N_swap = 3
 swap_id = np.arange(N_swap)
 n_no_outer_improves = 5
-n_no_inner_improves = 20000
+n_no_inner_improves = 20
 
 
 def get_score(matrix, path):

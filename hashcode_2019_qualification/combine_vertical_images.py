@@ -16,21 +16,27 @@ def combine_vertical_images(stuff: ProblemInfo):
 
     image_is_used = np.zeros(shape=len(stuff.vertical_id),dtype=np.bool)
 
-    best_matches = np.zeros(shape=[stuff.vertical_id.shape[0], 2], dtype=stuff.vertical_id.dtype)
+    num_max_matches = round(stuff.vertical_id.shape[0]/2)
+
+    best_matches = np.zeros(shape=[round(stuff.vertical_id.shape[0]/2), 2], dtype=stuff.vertical_id.dtype)
 
     for counter, img in enumerate(stuff.vertical_tags):
-        num_matches = 0
-        for pair_counter, pair_candidate in enumerate(stuff.vertical_tags):
+        if counter < num_max_matches:
+            num_matches = 0
+            for pair_counter, pair_candidate in enumerate(stuff.vertical_tags):
 
-            # candidate_image has already been used
-            if image_is_used[pair_counter] or image_is_used[counter]:
-                continue
+                # candidate_image has already been used
+                if image_is_used[pair_counter] or image_is_used[counter]:
+                    continue
 
-            # compute num matching tags
-            else:
-                matching_tags = np.setdiff1d(img, pair_candidate)
-                if len(matching_tags) > num_matches:
-                    best_matches[counter, :] = np.array([counter, pair_counter])
+                # compute num matching tags
+                else:
+                    matching_tags = np.setdiff1d(img, pair_candidate)
+                    if len(matching_tags) > num_matches:
+                        best_matches[counter, :] = np.array([counter, pair_counter])
+                        image_is_used[counter] = True
+
+        print(str(counter) + " out of " + str(len(stuff.vertical_tags)) + " done.")
 
     image_slide_indices_pairs = best_matches
 
