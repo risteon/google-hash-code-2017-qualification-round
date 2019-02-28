@@ -37,13 +37,13 @@ def solution(problem: ProblemInfo):
 
 
 @click.command()
-@click.option('--problem', default='kittens.in.txt')
+@click.option('--problem', default='input/a_example.txt')
 def main(problem):
 
     solution_functions = [solution]
 
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
-                                           'input', problem))
+                                           problem))
 
     # problem_obj.dump()
 
