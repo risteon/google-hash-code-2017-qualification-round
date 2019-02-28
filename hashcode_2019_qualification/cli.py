@@ -39,7 +39,7 @@ def main(problem):
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                                            problem))
 
-    compute(problem_obj)
+    # compute(problem_obj)
 
     assert problem_obj.vertical_id.shape[0] % 2 == 0
     vertical_mapping, merged_tags = combine_vertical_images(problem_obj)
