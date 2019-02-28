@@ -13,11 +13,15 @@ H 2 garden cat          Photo 3 is horizontal and has tags [garden, cat]
 
 class ProblemInfo:
     def __init__(self):
-        self.vertical_photos = np.empty([])
-        self.horizontal_photos = np.empty([])
+        self.vertical_tags = None
+        self.horizontal_tags = None
+
+        self.vertical_id = None
+        self.horizontal_id = None
 
     def dump(self):
         print('dumping problem info')
+
 
 def get_or_create_tag_id(tag, current_dict, current_tag_id):
     if tag in current_dict:
@@ -35,28 +39,47 @@ def parse_input(filename):
 
     vertical_count = 0
     horizontal_count = 0
-    max_num_tags = 100
-
-    tag_to_label_mapping = dict()
-    current_tag_id = 1
 
     for i in range(num_photos):
         info = file.readline().split(' ')
         shape = str(info[0])
-        num_tags = int(info[1])
         if shape == 'V':
-            problem_obj.vertical_photos[vertical_count] = np.zeros([max_num_tags])
-            for j in range(num_tags):
-                problem_obj.vertical_photos[vertical_count][j] = \
-                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
             vertical_count += 1
         elif shape == 'H':
-            problem_obj.horizontal_photos[horizontal_count] = np.zeros([max_num_tags])
-            for j in range(num_tags):
-                problem_obj.horizontal_photos[horizontal_count][j] = \
-                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
             horizontal_count += 1
         else:
             raise ValueError
+
+    file = open(filename)
+    num_photos = int(file.readline())
+
+    max_num_tags = 100
+    problem_obj.vertical_tags = np.zeros([vertical_count, max_num_tags])
+    problem_obj.horizontal_tags = np.zeros([horizontal_count, max_num_tags])
+
+    problem_obj.vertical_id = np.empty(vertical_count)
+    problem_obj.horizontal_id = np.empty(horizontal_count)
+
+    # tag_to_label_mapping = dict()
+    # current_tag_id = 1
+    #
+    # for i in range(num_photos):
+    #     info = file.readline().split(' ')
+    #     shape = str(info[0])
+    #     num_tags = int(info[1])
+    #     if shape == 'V':
+    #         # problem_obj.vertical_photos[vertical_count] = np.zeros(max_num_tags)
+    #         for j in range(num_tags):
+    #             problem_obj.vertical_tags[vertical_count][j] = \
+    #                 get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
+    #         vertical_count += 1
+    #     elif shape == 'H':
+    #         # problem_obj.horizontal_photos[horizontal_count] = np.zeros(max_num_tags)
+    #         for j in range(num_tags):
+    #             problem_obj.horizontal_tags[horizontal_count][j] = \
+    #                 get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
+    #         horizontal_count += 1
+    #     else:
+    #         raise ValueError
 
     return problem_obj
