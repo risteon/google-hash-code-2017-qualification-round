@@ -16,7 +16,7 @@ def combine_vertical_images(stuff: ProblemInfo):
 
     image_is_used = np.zeros(shape=len(stuff.vertical_id),dtype=np.bool)
 
-    best_matches = np.zeros_like(stuff.vertical_tags).reshape([-1,2])
+    best_matches = np.zeros(shape=[stuff.vertical_id.shape[0], 2], dtype=stuff.vertical_id.dtype)
 
     for counter, img in enumerate(stuff.vertical_tags):
         num_matches = 0
@@ -30,7 +30,7 @@ def combine_vertical_images(stuff: ProblemInfo):
             else:
                 matching_tags = np.setdiff1d(img, pair_candidate)
                 if len(matching_tags) > num_matches:
-                    best_matches[counter,:] = np.array([counter, pair_counter])
+                    best_matches[counter, :] = np.array([counter, pair_counter])
 
     image_slide_indices_pairs = best_matches
 
