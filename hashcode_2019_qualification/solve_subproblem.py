@@ -29,7 +29,6 @@ def solve_problem(matrix):
             perm = np.random.permutation(N_swap)
             while np.all(swap_id == perm):
                 perm = np.random.permutation(N_swap)
-            print(perm)
             nodes = path[idxs]
             perm_nodes = nodes[perm]
             new_path = np.array(path)

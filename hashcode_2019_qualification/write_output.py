@@ -3,6 +3,19 @@ from .read_input import ProblemInfo
 import numpy as np
 
 
+def write_output(slides, path):
+    assert slides.shape[1] == 2
+    with open(path, 'w') as file:
+        file.write(str(slides.shape[0]))
+        file.write('\n')
+        for i in range(slides.shape[0]):
+            if slides[i, 1] == -1:
+                file.write(str(slides[i, 0]))
+            else:
+                file.write(' '.join(map(str, slides[i, :].tolist())))
+            file.write('\n')
+
+
 class SolutionOutput:
     def __init__(self, problem: ProblemInfo):
 

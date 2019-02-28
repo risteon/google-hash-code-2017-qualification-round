@@ -5,9 +5,10 @@ import sys
 import click
 import os
 import numpy as np
+import time
 
 from .read_input import parse_input, ProblemInfo
-from .write_output import SolutionOutput
+from .write_output import write_output
 from .check_solution import parse_solution, compute_score
 from .statistics import compute
 from .solution import subdivide_and_solve_subproblems
@@ -16,6 +17,19 @@ from .solution import subdivide_and_solve_subproblems
 def dummy_vertical_mapping(problem_obj):
     v_ids = problem_obj.vertical_id.reshape([-1, 2])
     return v_ids, problem_obj.vertical_tags[:v_ids.shape[0], ...]
+
+
+def get_time_stamp(with_date=False, with_delims=False):
+    if with_date:
+        if with_delims:
+            return time.strftime('%Y/%m/%d-%H:%M:%S')
+        else:
+            return time.strftime('%Y%m%d-%H%M%S')
+    else:
+        if with_delims:
+            return time.strftime('%H:%M:%S')
+        else:
+            return time.strftime('%H%M%S')
 
 
 @click.command()
@@ -44,6 +58,10 @@ def main(problem):
     input_merged_ids = np.concatenate((horiz_ids, vertical_mapping), axis=0)
 
     permuted_ids = input_merged_ids[solution_ids]
+
+    problem_name = os.path.basename(problem)[:-4] + '_' + get_time_stamp() + '.txt'
+    output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'output', problem_name)
+    write_output(permuted_ids, output_path)
 
     return 0
 
