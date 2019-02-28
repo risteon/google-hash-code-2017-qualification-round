@@ -26,11 +26,11 @@ class ProblemInfo:
 def get_or_create_tag_id(tag, current_dict, current_tag_id):
     if tag in current_dict:
         print('{} in dict as {}'.format(tag, current_dict[tag]))
-        return current_dict[tag]
+        return current_dict[tag], current_tag_id
     else:
         print('set {} as {}'.format(tag, current_tag_id))
         current_dict[tag] = current_tag_id
-        return current_tag_id
+        return current_tag_id, current_tag_id + 1
 
 
 def parse_input(filename):
@@ -79,18 +79,21 @@ def parse_input(filename):
         if shape == 'V':
             for j in range(num_tags):
                 print(tags[j])
-                problem_obj.vertical_tags[vertical_count][j] = \
+                problem_obj.vertical_tags[vertical_count][j], current_tag_id = \
                     get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
                 problem_obj.vertical_id[vertical_count] = i
             vertical_count += 1
         elif shape == 'H':
             for j in range(num_tags):
                 print(tags[j])
-                problem_obj.horizontal_tags[horizontal_count][j] = \
+                problem_obj.horizontal_tags[horizontal_count][j], current_tag_id = \
                     get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
                 problem_obj.horizontal_id[horizontal_count] = i
             horizontal_count += 1
         else:
             raise ValueError
+
+    print(problem_obj.horizontal_tags)
+    print(problem_obj.vertical_tags)
 
     return problem_obj
