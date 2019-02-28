@@ -8,7 +8,7 @@ import numpy as np
 
 # from .read_input import ProblemInfo
 # from .write_output import SolutionOutput
-from solve_subproblem import solve_problem
+from .solve_subproblem import solve_problem
 
 input_array = np.asarray([[2, 3, 0, 0, 0], [2, 1, 3, 5, 0], [7, 2, 3, 0, 0]])
 
