@@ -37,8 +37,8 @@ setup(
     entry_points={
         'console_scripts': [
             'hashcode_2017_qualification=hashcode_2017_qualification.cli:main',
-            'hc=hashcode_2017_qualification.cli:main',
-            'sc=hashcode_2017_qualification.cli:check_solution'
+            'hc=hashcode_2019_qualification.cli:main',
+            'sc=hashcode_2019_qualification.cli:check_solution'
         ],
     },
     install_requires=requirements,
