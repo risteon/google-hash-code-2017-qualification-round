@@ -50,6 +50,7 @@ def parse_input(filename):
         else:
             raise ValueError
 
+    # open file again
     file = open(filename)
     num_photos = int(file.readline())
 
@@ -60,26 +61,24 @@ def parse_input(filename):
     problem_obj.vertical_id = np.empty(vertical_count)
     problem_obj.horizontal_id = np.empty(horizontal_count)
 
-    # tag_to_label_mapping = dict()
-    # current_tag_id = 1
-    #
-    # for i in range(num_photos):
-    #     info = file.readline().split(' ')
-    #     shape = str(info[0])
-    #     num_tags = int(info[1])
-    #     if shape == 'V':
-    #         # problem_obj.vertical_photos[vertical_count] = np.zeros(max_num_tags)
-    #         for j in range(num_tags):
-    #             problem_obj.vertical_tags[vertical_count][j] = \
-    #                 get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
-    #         vertical_count += 1
-    #     elif shape == 'H':
-    #         # problem_obj.horizontal_photos[horizontal_count] = np.zeros(max_num_tags)
-    #         for j in range(num_tags):
-    #             problem_obj.horizontal_tags[horizontal_count][j] = \
-    #                 get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
-    #         horizontal_count += 1
-    #     else:
-    #         raise ValueError
+    tag_to_label_mapping = dict()
+    current_tag_id = 1
+
+    for i in range(num_photos):
+        info = file.readline().split(' ')
+        shape = str(info[0])
+        num_tags = int(info[1])
+        if shape == 'V':
+            for j in range(num_tags):
+                problem_obj.vertical_tags[vertical_count][j] = \
+                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
+                problem_obj.vertical_id[vertical_count] = i
+        elif shape == 'H':
+            for j in range(num_tags):
+                problem_obj.horizontal_tags[horizontal_count][j] = \
+                    get_or_create_tag_id(j + 2, tag_to_label_mapping, current_tag_id)
+                problem_obj.horizontal_id[vertical_count] = i
+        else:
+            raise ValueError
 
     return problem_obj
