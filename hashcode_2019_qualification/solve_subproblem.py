@@ -3,7 +3,7 @@ import numpy as np
 
 N_swap = 3
 swap_id = np.arange(N_swap)
-n_no_outer_improves = 5
+n_no_outer_improves = 1
 n_no_inner_improves = 20000
 
 
@@ -14,21 +14,35 @@ def get_score(matrix, path):
     return score
 
 
-def solve_problem_new(matrix):
-    print(np.max(matrix))
-    print(matrix[np.where(matrix > 0)])
+def solve_problem_init(matrix):
+    # print('max matrix element', np.max(matrix))
+    # assert matrix.shape[0] == matrix.shape[1]
+    n = matrix.shape[0]
+    path = []
+    path.append(np.random.randint(n))
+    while len(path) < n:
+        cur = path[-1]
+        cur = matrix[cur]
+        idxs = np.argsort(cur)[::-1]
+        for idx in idxs:
+            if idx not in path:
+                break
+        path.append(idx)
+    print('score init', get_score(matrix, path))
+    return np.array(path)
 
 
 def solve_problem(matrix):
     print('max matrix element', np.max(matrix))
     assert matrix.shape[0] == matrix.shape[1]
     n = matrix.shape[0]
-    best_path = np.arange(n)
+    best_path = solve_problem_init(matrix)
     best_score = get_score(matrix, best_path)
     no_outer_improves = 0
     while no_outer_improves < n_no_outer_improves:
-        print(best_score)
-        path = np.random.permutation(n)
+        print('current best score', best_score)
+        # path = np.random.permutation(n)
+        path = solve_problem_init(matrix)
         score = get_score(matrix, path)
         no_inner_improves = 0
         while no_inner_improves < n_no_inner_improves:
@@ -48,6 +62,7 @@ def solve_problem(matrix):
             else:
                 no_inner_improves += 1
         if score > best_score:
+            print('new best score found')
             best_score = score
             best_path = path
             no_outer_improves = 0
