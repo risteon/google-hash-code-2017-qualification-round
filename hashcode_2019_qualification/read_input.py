@@ -59,7 +59,7 @@ def parse_input(filename):
     file = open(filename)
     num_photos = int(file.readline())
 
-    max_num_tags = 100
+    max_num_tags = 101
     problem_obj.vertical_tags = np.zeros([vertical_count, max_num_tags], dtype=np.int32)
     problem_obj.horizontal_tags = np.zeros([horizontal_count, max_num_tags], dtype=np.int32)
 
