@@ -77,17 +77,19 @@ def parse_input(filename):
         tags = info[2:]
         print(info)
         if shape == 'V':
-            for j in range(num_tags):
-                print(tags[j])
+            for j, tag in enumerate(tags):
+                if j == num_tags - 1:
+                    tag = tag[:-1]
                 problem_obj.vertical_tags[vertical_count][j], current_tag_id = \
-                    get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
+                    get_or_create_tag_id(tag, tag_to_label_mapping, current_tag_id)
                 problem_obj.vertical_id[vertical_count] = i
             vertical_count += 1
         elif shape == 'H':
-            for j in range(num_tags):
-                print(tags[j])
+            for j, tag in enumerate(tags):
+                if j == num_tags - 1:
+                    tag = tag[:-1]
                 problem_obj.horizontal_tags[horizontal_count][j], current_tag_id = \
-                    get_or_create_tag_id(tags[j].strip(), tag_to_label_mapping, current_tag_id)
+                    get_or_create_tag_id(tag, tag_to_label_mapping, current_tag_id)
                 problem_obj.horizontal_id[horizontal_count] = i
             horizontal_count += 1
         else:
