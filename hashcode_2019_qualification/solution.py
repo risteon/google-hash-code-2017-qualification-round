@@ -9,7 +9,7 @@ from numba import jit
 #from .read_input import ProblemInfo
 #from .write_output import SolutionOutput
 
-input_array = np.asarray([[2, 3, 0, 0, 0], [2, 1, 3, 5, 0], [7, 0, 0, 0, 0]])
+input_array = np.asarray([[2, 3, 0, 0, 0], [2, 1, 3, 5, 0], [7, 2, 3, 0, 0]])
 
 
 def compute_score_for_submatrix_of_photos(input_array):
@@ -18,7 +18,6 @@ def compute_score_for_submatrix_of_photos(input_array):
 
     for a in range(n):
         for b in range(a+1, n):
-            print(a, b)
             scores[a, b] = min(np.setdiff1d(input_array[a, :], input_array[b, :]).size,
                                np.setdiff1d(input_array[b, :], input_array[a, :]).size,
                                np.intersect1d(input_array[a, :], input_array[b, :]).size - 1)
