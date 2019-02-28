@@ -10,28 +10,40 @@ from .read_input import parse_input, ProblemInfo
 from .write_output import SolutionOutput
 from .check_solution import parse_solution, compute_score
 from .statistics import compute
+from .solution import subdivide_and_solve_subproblems
 
 
 def dummy_vertical_mapping(problem_obj):
-    return problem_obj.vertical_id.reshape([2, -1])
+    v_ids = problem_obj.vertical_id.reshape([-1, 2])
+    return v_ids, problem_obj.vertical_tags[:v_ids.shape[0], ...]
 
 
 @click.command()
 @click.option('--problem', default='input/a_example.txt')
 def main(problem):
 
-    solution_functions = [None]
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
                                            problem))
 
     compute(problem_obj)
 
     assert problem_obj.vertical_id.shape[0] % 2 == 0
-    vertical_mapping = dummy_vertical_mapping(problem_obj)
+    vertical_mapping, merged_tags = dummy_vertical_mapping(problem_obj)
 
     # combined_mapping
     n_horiz = problem_obj.horizontal_id.shape[0]
     mapping = np.arange(0, n_horiz + vertical_mapping.shape[0])
+
+    #
+    tags = np.concatenate((problem_obj.horizontal_tags, merged_tags))
+    solution_ids = subdivide_and_solve_subproblems(tags, mapping)
+
+    horiz_ids = np.stack((problem_obj.horizontal_id,
+                        np.full(shape=[problem_obj.horizontal_id.shape[0]], fill_value=-1)), axis=-1)
+
+    input_merged_ids = np.concatenate((horiz_ids, vertical_mapping), axis=0)
+
+    permuted_ids = input_merged_ids[solution_ids]
 
     return 0
 
