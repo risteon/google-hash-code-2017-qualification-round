@@ -8,6 +8,7 @@ import numpy as np
 
 # from .read_input import ProblemInfo
 # from .write_output import SolutionOutput
+from solve_subproblem import solve_problem
 
 input_array = np.asarray([[2, 3, 0, 0, 0], [2, 1, 3, 5, 0], [7, 2, 3, 0, 0]])
 
@@ -33,8 +34,7 @@ def subdivide_and_solve_subproblems(slide_input_array, slide_ids):
                      current:min(current+max_tolerable_size, slide_input_array.shape[0])]
         sub_ids = slide_ids[current:min(current+max_tolerable_size, slide_input_array.shape[0])]
         sub_scores = compute_score_for_submatrix_of_photos(sub_slides)
-        # Todo input solution
-        sub_solution = dummy_solution_for_matrix(sub_scores)
+        sub_solution = solve_problem(sub_scores)
 
         # permute input IDs according to solution
         sub_solution_ids = sub_ids[sub_solution]
