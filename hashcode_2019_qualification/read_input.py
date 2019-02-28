@@ -58,11 +58,11 @@ def parse_input(filename):
     num_photos = int(file.readline())
 
     max_num_tags = 100
-    problem_obj.vertical_tags = np.zeros([vertical_count, max_num_tags])
-    problem_obj.horizontal_tags = np.zeros([horizontal_count, max_num_tags])
+    problem_obj.vertical_tags = np.zeros([vertical_count, max_num_tags], dtype=np.int32)
+    problem_obj.horizontal_tags = np.zeros([horizontal_count, max_num_tags], dtype=np.int32)
 
-    problem_obj.vertical_id = np.empty(vertical_count)
-    problem_obj.horizontal_id = np.empty(horizontal_count)
+    problem_obj.vertical_id = np.empty(vertical_count, dtype=np.int32)
+    problem_obj.horizontal_id = np.empty(horizontal_count, dtype=np.int32)
 
     tag_to_label_mapping = dict()
     current_tag_id = 1
