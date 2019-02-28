@@ -12,6 +12,7 @@ def condition(tags_a, tags_b):
 
 def merge_tags(tag_a, tag_b):
     concat = np.concatenate((tag_a, tag_b))
+    concat = concat[concat != 0]
     _, i = np.unique(concat, return_index=True)
     return concat[np.sort(i)]
 
@@ -27,27 +28,35 @@ def compute(problem):
     num_h = np.shape(ids_h)[0]
 
     max_possible_pairs = 2 ^ (num_h + (num_v // 2))
-    random_ids_v1 = np.random.randint(low=0, high=num_v-1, size=max_possible_pairs)
-    random_ids_v2 = np.random.randint(low=0, high=num_v-1, size=max_possible_pairs)
-    random_ids_h = np.random.randint(low=0, high=num_h-1, size=max_possible_pairs)
+    if num_v == num_h == 0:
+        raise ValueError
 
     for i in range(min(max_possible_pairs, 100)):
         # 0: V, 1: H
         type_a = np.random.randint(low=0, high=1, size=1, dtype=np.bool)
         type_b = np.random.randint(low=0, high=1, size=1, dtype=np.bool)
 
+        if (type_a and num_h == 0) or (not type_a and num_v == 0):
+            type_a = not type_a
+        if (type_b and num_h == 0) or (not type_b and num_v == 0):
+            type_b = not type_b
+
         if type_a:
-            sample_a = tags_h[random_ids_h[i]]
+            sample_a = tags_h[np.random.randint(low=0, high=num_h-1, size=1)]
         else:
-            if random_ids_v1[i] == random_ids_v2[i]:
-                random_ids_v2[i] += 1
-            sample_a = merge_tags(tags_v[random_ids_v1[i]], tags_v[random_ids_v2[i]])
+            rand_1 = np.random.randint(low=0, high=num_v-1, size=1)
+            rand_2 = np.random.randint(low=0, high=num_v-1, size=1)
+            if rand_1 == rand_2:
+                rand_2 += 1
+            sample_a = merge_tags(tags_v[rand_1], tags_v[rand_2])
         if type_b:
-            sample_b = tags_h[random_ids_h[i]]
+            sample_b = tags_h[np.random.randint(low=0, high=num_h-1, size=1)]
         else:
-            if random_ids_v1[i] == random_ids_v2[i]:
-                random_ids_v2[i] += 1
-            sample_b = merge_tags(tags_v[random_ids_v1[i]], tags_v[random_ids_v2[i]])
+            rand_1 = np.random.randint(low=0, high=num_v-1, size=1)
+            rand_2 = np.random.randint(low=0, high=num_v-1, size=1)
+            if rand_1 == rand_2:
+                rand_2 += 1
+            sample_b = merge_tags(tags_v[rand_1], tags_v[rand_2])
 
         min_args = np.argmin([union(sample_a, sample_b),
                              condition(sample_a, sample_b),
