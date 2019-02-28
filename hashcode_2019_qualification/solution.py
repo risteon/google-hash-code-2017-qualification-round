@@ -3,19 +3,51 @@
 """Solution module."""
 
 import numpy as np
-import numba
-from numba import jit
+# import numba
+# from numba import jit
 
-#from .read_input import ProblemInfo
-#from .write_output import SolutionOutput
+# from .read_input import ProblemInfo
+# from .write_output import SolutionOutput
 
 input_array = np.asarray([[2, 3, 0, 0, 0], [2, 1, 3, 5, 0], [7, 2, 3, 0, 0]])
 
 
-def subdivide_into_subproblems(slide_input_array, slide_ids):
+def dummy_solution_for_matrix(score_matrix):
+    return np.arange(score_matrix.shape[0])
+
+
+def dummy_concatenate(list_of_sub_ids):
+    return np.concatenate(list_of_sub_ids)
+
+
+def subdivide_and_solve_subproblems(slide_input_array, slide_ids):
     assert slide_input_array.shape[0] == slide_ids.shape[0]
 
+    max_tolerable_size = 1000
+    current = 0
 
+    list_of_sub_solution_ids = []
+
+    while True:
+        sub_slides = slide_input_array[
+                     current:min(current+max_tolerable_size, slide_input_array.shape[0])]
+        sub_ids = slide_ids[current:min(current+max_tolerable_size, slide_input_array.shape[0])]
+        sub_scores = compute_score_for_submatrix_of_photos(sub_slides)
+        # Todo input solution
+        sub_solution = dummy_solution_for_matrix(sub_scores)
+
+        # permute input IDs according to solution
+        sub_solution_ids = sub_ids[sub_solution]
+        list_of_sub_solution_ids.append(sub_solution_ids)
+
+        current += max_tolerable_size
+        if current >= slide_input_array.shape[0]:
+            break
+
+    # Todo input concatenation solution
+    solution_ids = dummy_concatenate(list_of_sub_solution_ids)
+    assert solution_ids.shape[0] == slide_input_array.shape[0]
+    return solution_ids
 
 
 def compute_score_for_submatrix_of_photos(input_array):
