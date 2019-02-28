@@ -3,8 +3,8 @@
 """Solution module."""
 
 import numpy as np
-# import numba
-# from numba import jit
+import numba
+from numba import jit
 
 # from .read_input import ProblemInfo
 # from .write_output import SolutionOutput
@@ -24,7 +24,7 @@ def dummy_concatenate(list_of_sub_ids):
 def subdivide_and_solve_subproblems(slide_input_array, slide_ids):
     assert slide_input_array.shape[0] == slide_ids.shape[0]
 
-    max_tolerable_size = 1000
+    max_tolerable_size = 100
     current = 0
 
     list_of_sub_solution_ids = []
@@ -65,27 +65,3 @@ def compute_score_for_submatrix_of_photos(input_array):
             scores[a, b] = min(n_intersect, n_diff_ab, n_diff_ba)
     # mirror along diagonal
     return scores.transpose() + scores
-
-
-
-# def solve_utility(problem: ProblemInfo):
-#     assert problem.cache_count == problem.endpoints.shape[-1]
-#     assert problem.latency_datacenter.shape[0] == problem.endpoints.shape[0]
-#
-#     gains = np.expand_dims(problem.latency_datacenter, axis=-1) - problem.endpoints
-#     # zero gain if not connected to cache
-#     gains[problem.endpoints == -1] = 0
-#
-#     # calc utility scores per cache per video [ caches x videos ]
-#     # -> summarize latency gains for all cache-to-endpoint connections
-#
-#     cache_gains = np.sum(gains, axis=0)
-#     assert cache_gains.shape[0] == problem.cache_count
-#
-#     video_scores = np.reciprocal(problem.videos.astype(np.float64))
-#
-#     scores = np.dot(np.expand_dims(video_scores, axis=-1), np.expand_dims(cache_gains, axis=0))
-#
-#
-#
-#     return SolutionOutput()

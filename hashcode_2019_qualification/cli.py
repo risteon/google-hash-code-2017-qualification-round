@@ -34,7 +34,7 @@ def get_time_stamp(with_date=False, with_delims=False):
 
 
 @click.command()
-@click.option('--problem', default='input/c_memorable_moments.txt')
+@click.option('--problem', default='input/d_pet_pictures.txt')
 def main(problem):
 
     problem_obj = parse_input(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..',
