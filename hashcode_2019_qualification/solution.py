@@ -41,6 +41,8 @@ def subdivide_and_solve_subproblems(slide_input_array, slide_ids):
         list_of_sub_solution_ids.append(sub_solution_ids)
 
         current += max_tolerable_size
+        print('images processed', current)
+        print('size slide input array', slide_input_array.shape[0])
         if current >= slide_input_array.shape[0]:
             break
 

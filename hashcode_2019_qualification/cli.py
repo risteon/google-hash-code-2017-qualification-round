@@ -14,6 +14,7 @@ from .statistics import compute
 from .solution import subdivide_and_solve_subproblems
 from .combine_vertical_images import combine_vertical_images
 
+
 def dummy_vertical_mapping(problem_obj):
     v_ids = problem_obj.vertical_id.reshape([-1, 2])
     return v_ids, problem_obj.vertical_tags[:v_ids.shape[0], ...]
